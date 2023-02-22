@@ -1,55 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
-    <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    @vite('resources/css/app.css')
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Blog App - @yield('title')</title>
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body>
-    {{-- @section('sidebar')
-        This is the master sidebar.
-    @show --}}
-
-    <header class="bg-primary">
-        <div class="container mx-auto flex">
-            <div>
-                <a href="/"><h1 class="text-3xl text-gray-50 py-2 inline-block">Blog App</h1></a>
+<body class="">
+    <header>
+        <div class="container mx-auto navbar bg-base-100">
+            <div class="flex-none">
+                <button class="btn btn-square btn-ghost">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        class="inline-block w-5 h-5 stroke-current">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
             </div>
-            <div class="flex-grow"></div>
-            <div class="h-auto">
-                <ul class="flex h-full justify-center nav-links-wrapper">
-                    <li><a href="/" class="nav-link">Login</a></li>
-                    <li><a href="/" class="nav-link">Signup</a></li>
+            <div class="flex-1">
+                <a href="{{ route('home') }}" class="btn btn-ghost normal-case text-xl">Blog App</a>
+            </div>
+            <div class="flex-none">
+                <ul class="menu menu-horizontal px-1">
+                    @if (Auth::guest())
+                        <li><a href="{{ route('login') }}">Login</a></li>
+                        <li><a href="{{ route('register') }}">Register</a></li>
+                    @else
+                    @endif
+                    {{-- <li><a>Item 3</a></li> --}}
                 </ul>
+                @if (!Auth::guest())
+                    <div class="dropdown dropdown-end">
+                        <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+                            <div class="w-10 rounded-full">
+                                <img src="https://via.placeholder.com/60x60.png?text=BA" />
+                            </div>
+                        </label>
+                        <ul tabindex="0"
+                            class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
+                            <li>
+                                <a href="{{route('profile.edit')}}" class="justify-between">
+                                    {{__('Profile')}}
+                                </a>
+                            </li>
+                            {{-- <li><a href="{{route('')}}">Settings</a></li> --}}
+
+                            <li>
+                                <!-- Authentication -->
+                                <form class="block" method="POST" action="{{ route('logout') }}">
+                                    @csrf
+
+                                    <a class="block" href="{{route('logout')}}"
+                                        onclick="event.preventDefault(); this.closest('form').submit();">{{ __('Log Out') }}</a>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                @endif
             </div>
+
         </div>
     </header>
-
-    <div class="container mx-auto px-4 md:flex">
-       
-
-        <section class="flex-1 bg-gray-400">
-            @yield('content')
-        </section>
-
-        <aside class="lg:w-1/4 md:w-1/3 bg-gray-700">
-            @yield('sidebar')
-        </aside>
-
-    </div>
+    <main>
+        {{ $slot }}
+    </main>
 </body>
 
 </html>

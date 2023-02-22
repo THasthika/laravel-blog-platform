@@ -1,22 +1,5 @@
-@extends('layouts.app')
-
-@section('title', 'Page Title')
-
-@section('content')
-
+<x-app-layout>
     <div>
-        <h2 class="text-xl">Recent Posts</h2>
-
-        <div>
-            Post
-        </div>
+        <x-dark-mode-toggle>XXX</x-dark-mode-toggle>
     </div>
-
-@endsection
-
-
-@section('sidebar')
-    @parent
-
-    <p>This is appended to the master sidebar.</p>
-@endsection
+</x-app-layout>

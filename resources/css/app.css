@@ -2,12 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
+/* @layer components {
     .nav-link {
-        @apply block px-3 py-1 border-solid border-secondary border text-gray-100 transition-colors hover:bg-secondary hover:text-gray-800 active:shadow-inner;
+        @apply block px-3 py-2 border-solid border-secondary border bg-primary text-gray-50 transition-colors hover:bg-secondary hover:text-gray-800 active:shadow-inner rounded;
+    }
+
+    .nav-links-wrapper {
+        @apply sm:flex;
     }
 
     .nav-links-wrapper li {
-        @apply my-auto mx-2;
+        @apply my-auto mx-2 my-2;
     }
-}
+} */
