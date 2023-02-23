@@ -12,12 +12,30 @@
                     @csrf
 
                     <div class="form-control w-full">
-                        <label class="label" for="name">
-                            <span class="label-text">{{ __('Name') }}</span>
+                        <label class="label" for="first_name">
+                            <span class="label-text">{{ __('First Name') }}</span>
                         </label>
-                        <input type="text" name="name" id="name" placeholder="{{ __('Name') }}" required
-                            class="input input-bordered w-full" value="{{ old('name') }}" />
-                        <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                        <input type="text" name="first_name" id="first_name" placeholder="{{ __('First Name') }}" required
+                            class="input input-bordered w-full" value="{{ old('first_name') }}" />
+                        <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
+                    </div>
+
+                    <div class="form-control w-full mt-4">
+                        <label class="label" for="last_name">
+                            <span class="label-text">{{ __('Last Name') }}</span>
+                        </label>
+                        <input type="text" name="last_name" id="last_name" placeholder="{{ __('Last Name') }}" required
+                            class="input input-bordered w-full" value="{{ old('last_name') }}" />
+                        <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
+                    </div>
+
+                    <div class="form-control w-full mt-4">
+                        <label class="label" for="username">
+                            <span class="label-text">{{ __('Username') }}</span>
+                        </label>
+                        <input type="text" name="username" id="username" placeholder="{{ __('Username') }}" required
+                            class="input input-bordered w-full" value="{{ old('username') }}" />
+                        <x-input-error :messages="$errors->get('username')" class="mt-2" />
                     </div>
 
                     <div class="form-control w-full mt-4">
@@ -35,7 +53,7 @@
                         </label>
                         <input type="password" name="password" id="password" placeholder="{{ __('Password') }}"
                             required class="input input-bordered w-full" />
-                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
                     </div>
 
                     <div class="form-control w-full mt-4">
@@ -47,7 +65,7 @@
                         <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                     </div>
 
-                    <div class="flex items-center justify-end mt-4">
+                    <div class="flex items-center justify-end mt-2">
                         <a class="link" href="{{ route('login') }}">
                             {{ __('Already registered?') }}
                         </a>

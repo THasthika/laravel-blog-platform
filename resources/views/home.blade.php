@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div>
-        <x-dark-mode-toggle>XXX</x-dark-mode-toggle>
+    <div class="container mx-auto px-2 mt-4">
+xx
     </div>
 </x-app-layout>
