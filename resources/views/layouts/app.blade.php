@@ -45,7 +45,11 @@
                     <div class="ml-4 dropdown dropdown-end">
                         <label tabindex="0" class="btn btn-ghost btn-circle avatar">
                             <div class="w-10 rounded-full">
-                                <img src="https://via.placeholder.com/60x60.png?text={{Auth::user()->username[0]}}" />
+                                @if (Auth::user()->image)
+                                    <img src="{{asset('storage/'.Auth::user()->image)}}" />
+                                @else
+                                    <img src="https://via.placeholder.com/60x60.png?text={{Auth::user()->username[0]}}" />
+                                @endif
                             </div>
                         </label>
                         <ul tabindex="0"
