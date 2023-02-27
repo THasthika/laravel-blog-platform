@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,9 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => fake()->words(5, true),
+            'subtitle' => fake()->words(10, true),
+            'content' => fake()->paragraphs(5, true),
         ];
     }
 }
