@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->text('content');
+        Schema::create('post_views', function (Blueprint $table) {
             $table->foreignUuid('post_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignUuid('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->timestamps();
+            $table->ipAddress('client_ip')->nullable();
+            $table->timestamp('time')->default(now());
         });
     }
 
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('post_views');
     }
 };

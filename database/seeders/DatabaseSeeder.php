@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Reaction;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -26,20 +28,15 @@ class DatabaseSeeder extends Seeder
             ->has(Post::factory()->hasAttached($tags)->set('category_id', $category->id)->count(3))
             ->count(3)
             ->create();
-//        Post::factory()->count(3)->create();
 
-//        Post::factory()->count(10)->has(User::factory(), 'user_id')->create();
+        $user = User::query()->first();
 
-//        $this->call([
-//            UserSeeder::class
-//        ]);
-        // (new PostSeeder())->run();
-        // (new CommentSeeder())->run();
-        // \App\Models\User::factory(10)->create();
+        $post = Post::query()->first();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $comment = Comment::factory(1)->set('post_id', $post->id)->set('user_id', $user->id)->create()->first();
+
+        $comment->upVote($user);
+
+        Reaction::factory(5)->create();
     }
 }

@@ -10,6 +10,11 @@ Alpine.start();
 
 themeChange();
 
+window.toggleDrawer = function () {
+    let drawer = document.getElementById('my-drawer');
+    drawer.checked = !drawer.checked;
+}
+
 // function isDarkMode() {
 //     return document.documentElement.classList.contains('dark');
 // }

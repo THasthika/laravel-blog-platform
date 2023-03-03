@@ -17,6 +17,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('first_name');
             $table->string('last_name');
+            $table->enum('role', ['admin', 'author'])->default('author');
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('profile_image')->nullable();

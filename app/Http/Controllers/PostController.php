@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostViewed;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -34,9 +35,9 @@ class PostController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Response
+    public function create(): View
     {
-
+        return view('posts.create', []);
     }
 
     /**
@@ -50,9 +51,13 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post): Response
+    public function show(Request $request, string $id): View
     {
-        //
+        $post = Post::where('id', $id)->first();
+
+        PostViewed::dispatchIf(!!$post, $request, $post);
+
+        return view('posts.show', ['post' => $post]);
     }
 
     /**

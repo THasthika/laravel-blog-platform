@@ -30,8 +30,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile-image', [ProfileController::class, 'updateProfileImage'])->name('profile.updateImage');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Post Routes
-    Route::get('/posts', [PostController::class, 'index'])->name('post.show');
+    Route::get('/posts/create', [PostController::class, 'create'])->name('post.create');
 });
+
+// Post Routes
+Route::get('/posts', [PostController::class, 'index'])->name('post.list');
+Route::get('/posts/{id}', [PostController::class, 'show'])->name('post.show');
 
 require __DIR__.'/auth.php';
