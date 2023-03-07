@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_views', function (Blueprint $table) {
+        Schema::create('post_reaction', function (Blueprint $table) {
             $table->foreignUuid('post_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->ipAddress('client_ip')->nullable();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignUuid('reaction_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->primary(['post_id', 'user_id']);
             $table->timestamp('created_at')->default(now());
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('post_views');
+        Schema::dropIfExists('post_reaction');
     }
 };

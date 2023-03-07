@@ -11,6 +11,12 @@ class Tag extends Model
 {
     use HasFactory, HasUuids;
 
+    public $timestamps = false;
+
+    protected $fillable = [
+        'name'
+    ];
+
     public function posts(): BelongsToMany
     {
         return $this->belongsToMany(Post::class);

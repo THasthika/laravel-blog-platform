@@ -17,6 +17,11 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function post(): BelongsTo
+    {
+        return $this->belongsTo(Post::class);
+    }
+
     public function up_votes(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\Comment', 'comment_user_vote')->wherePivot('vote_type', 'UP');
