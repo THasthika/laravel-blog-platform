@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-use App\Models\Reaction;
 use App\Models\Category;
 use App\Models\Tag;
 use \App\Models\User;
@@ -16,21 +15,6 @@ return new class extends Migration {
 
     private $CATEGORIES = [
         "Programming", "Computer Science", "Game Development", "Mathematics"
-    ];
-
-    private $REACTIONS = [
-        [
-            "name" => "Like",
-            "icon_path" => "/reactions/like.png"
-        ],
-        [
-            "name" => "Clap",
-            "icon_path" => "/reactions/clap.png"
-        ],
-        [
-            "name" => "Award",
-            "icon_path" => "/reactions/award.png"
-        ]
     ];
 
     /**
@@ -71,17 +55,6 @@ return new class extends Migration {
         }
         Category::insert($cat_insert);
 
-        // add reactions
-        $reaction_insert = [];
-        foreach ($this->REACTIONS as $reaction) {
-            $reaction_insert[] = [
-                'id' => Str::uuid(),
-                'name' => $reaction['name'],
-                'icon_path' => $reaction['icon_path']
-            ];
-        }
-        Reaction::insert($reaction_insert);
-
     }
 
     /**
@@ -97,8 +70,5 @@ return new class extends Migration {
 
         // remove categories
         Category::delete();
-
-        // remove reactions
-        Reaction::delete();
     }
 };

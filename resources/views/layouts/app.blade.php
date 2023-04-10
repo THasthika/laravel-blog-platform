@@ -40,6 +40,9 @@
                         <ul class="menu menu-horizontal px-1">
                             <li><a href="{{ route('home') }}">{{__('Home')}}</a></li>
                             <li><a href="{{ route('post.list') }}">{{__('Posts')}}</a></li>
+                            @if (Auth::user() && Auth::user()->isAdmin())
+                                <li><a href="/">{{__('Users')}}</a></li>
+                            @endif
                             @if (Auth::guest())
                                 <li><a href="{{ route('login') }}">{{__('Login')}}</a></li>
                                 <li><a href="{{ route('register') }}">{{__('Register')}}</a></li>

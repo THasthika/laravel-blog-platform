@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_tag', function (Blueprint $table) {
-            $table->foreignUuid('post_id')->constrained()->cascadeOnDelete();
-            $table->foreignUuid('tag_id')->constrained()->cascadeOnDelete();
-            $table->primary(['post_id', 'tag_id']);
+        Schema::create('taggables', function (Blueprint $table) {
+            $table->foreignUuid('tag_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->uuid('taggable_id');
+            $table->string('taggable_type');
+            $table->primary(['tag_id', 'taggable_id', 'taggable_type']);
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('post_tag');
+        Schema::dropIfExists('taggables');
     }
 };

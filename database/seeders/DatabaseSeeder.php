@@ -6,7 +6,6 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Post;
-use App\Models\Reaction;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -18,7 +17,7 @@ class DatabaseSeeder extends Seeder
     private int $POST_PER_USER = 5;
     private int $TAG_PER_POST = 3;
     private int $COMMENT_PER_POST = 3;
-    private int $REACTION_PER_POST = 3;
+    private int $VOTE_PER_POST = 3;
     private int $VOTE_PER_COMMENT = 3;
 
     /**
@@ -57,7 +56,7 @@ class DatabaseSeeder extends Seeder
                 $tag_keys = array_rand($tag_array, $this->TAG_PER_POST);
 
                 foreach ($tag_keys as $tk) {
-                    $post->tags()->attach($tags[$tk]);
+                    $post->tags()->save($tags[$tk]);
                 }
 
                 $post->category_id = $category->id;
@@ -69,8 +68,6 @@ class DatabaseSeeder extends Seeder
 
         $posts = Post::all();
 
-        $reactions = Reaction::all();
-
         // comment and react on posts
         foreach ($posts as $post) {
             $user_idxs = array_rand($users->toArray(), $this->COMMENT_PER_POST);
@@ -79,14 +76,18 @@ class DatabaseSeeder extends Seeder
                 Comment::factory()->set('post_id', $post->id)->set('user_id', $users[$user_idx]->id)->create();
             }
 
-            $user_idxs = array_rand($users->toArray(), $this->REACTION_PER_POST);
+            $user_idxs = array_rand($users->toArray(), $this->VOTE_PER_POST);
 
             foreach ($user_idxs as $user_idx) {
-                $reaction = $reactions[array_rand($reactions->toArray())];
-                $post->addReaction($users[$user_idx], $reaction);
+                $post->removeVote($users[$user_idx]);
+                if (rand(0, 1) == 1) {
+                    $post->upVote($users[$user_idx]);
+                } else {
+                    $post->downVote($users[$user_idx]);
+                }
             }
         }
-        echo "Comments and Reactions Created!\n";
+        echo "Comments Created!\n";
 
         $comments = Comment::all();
 

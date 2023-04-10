@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\DB;
 
 class Post extends Model
@@ -19,33 +23,43 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function category(): BelongsTo
+    public function category(): HasOne
     {
-        return $this->belongsTo(Category::class);
+        return $this->hasOne(Category::class);
     }
 
-    public function tags(): BelongsToMany
+    public function tags(): MorphToMany
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 
-    public function reactions(): BelongsToMany
+    public function up_votes(): BelongsToMany
     {
-        return $this->belongsToMany(Reaction::class);
+        return $this->belongsToMany('App\Models\Post', 'post_user_vote')->wherePivot('vote_type', 'UP');
     }
 
-    public function addReaction($user, $reaction)
+    public function down_votes(): BelongsToMany
     {
-        $this->reactions()->attach($this->id, ['user_id' => $user->id, 'reaction_id' => $reaction->id]);
+        return $this->belongsToMany('App\Models\Post', 'post_user_vote')->wherePivot('vote_type', 'DOWN');
     }
 
-    public function removeReaction($user)
+    public function votes(): BelongsToMany
     {
-        $this->reactions()->detach(['user_id' => $user->id, 'post_id' => $this->id]);
+        return $this->belongsToMany('App\Models\Post', 'post_user_vote');
     }
 
-    public function getReactionCounts() : Collection
+    public function upVote($user)
     {
-        return $this->reactions()->selectRaw('reaction_id, count(*) as reaction_count')->groupBy(['reaction_id', 'post_id'])->get();
+        $this->votes()->attach($this->id, ['vote_type' => 'UP', 'user_id' => $user->id]);
+    }
+
+    public function downVote($user)
+    {
+        $this->votes()->attach($this->id, ['vote_type' => 'DOWN', 'user_id' => $user->id]);
+    }
+
+    public function removeVote($user)
+    {
+        $this->votes()->detach(['post_id' => $this->id, 'user_id' => $user->id]);
     }
 }
