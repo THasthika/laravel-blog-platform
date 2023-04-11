@@ -13,10 +13,55 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Post extends Model
 {
     use HasUuids, HasFactory;
+
+    public function getVoteCountAttribute(): int
+    {
+        $votes = $this->votes()->select(['vote_type'])->pluck('vote_type')->toArray();
+        $up_vote_count = 0;
+        $down_vote_count = 0;
+        foreach ($votes as $vote) {
+            if ($vote == 'UP') {
+                $up_vote_count += 1;
+            } else {
+                $down_vote_count += 1;
+            }
+        }
+        return $up_vote_count - $down_vote_count;
+    }
+
+    public function canUpVoteBy($user_id): bool
+    {
+        $x = $this->votes()->where(['user_id' => $user_id, 'post_id' => $this->id, 'vote_type' => 'UP'])->count();
+        Log::debug("UP" . $x);
+        return $x == 0;
+    }
+
+    public function canDownVoteBy($user_id): bool
+    {
+        $x = $this->votes()->where(['user_id' => $user_id, 'post_id' => $this->id, 'vote_type' => 'DOWN'])->count();
+        Log::debug("DOWN" . $x);
+        return $x == 0;
+    }
+
+    public function upVoteBy($user)
+    {
+        $this->votes()->insert(['vote_type' => 'UP', 'user_id' => $user->id, 'post_id' => $this->id]);
+    }
+
+    public function downVoteBy($user)
+    {
+        $this->votes()->insert(['vote_type' => 'DOWN', 'user_id' => $user->id, 'post_id' => $this->id]);
+    }
+
+    public function removeVoteBy($user)
+    {
+        $this->votes()->where(['post_id' => $this->id, 'user_id' => $user->id])->delete();
+    }
 
     public function user(): BelongsTo
     {
@@ -33,33 +78,9 @@ class Post extends Model
         return $this->morphToMany(Tag::class, 'taggable');
     }
 
-    public function up_votes(): BelongsToMany
+    public function votes(): HasMany
     {
-        return $this->belongsToMany('App\Models\Post', 'post_user_vote')->wherePivot('vote_type', 'UP');
+        return $this->hasMany(PostVote::class);
     }
 
-    public function down_votes(): BelongsToMany
-    {
-        return $this->belongsToMany('App\Models\Post', 'post_user_vote')->wherePivot('vote_type', 'DOWN');
-    }
-
-    public function votes(): BelongsToMany
-    {
-        return $this->belongsToMany('App\Models\Post', 'post_user_vote');
-    }
-
-    public function upVote($user)
-    {
-        $this->votes()->attach($this->id, ['vote_type' => 'UP', 'user_id' => $user->id]);
-    }
-
-    public function downVote($user)
-    {
-        $this->votes()->attach($this->id, ['vote_type' => 'DOWN', 'user_id' => $user->id]);
-    }
-
-    public function removeVote($user)
-    {
-        $this->votes()->detach(['post_id' => $this->id, 'user_id' => $user->id]);
-    }
 }

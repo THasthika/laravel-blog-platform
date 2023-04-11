@@ -27,6 +27,9 @@
                     </a>
                 @endforeach
             </div>
+            <div class="mt-2 mb-4">
+                {{ $posts->links() }}
+            </div>
         </div>
         <div class="md:w-1/5 mt-4 md:mt-0">
             <div class="card shadow-md m-2">

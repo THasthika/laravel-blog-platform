@@ -38,17 +38,17 @@ class Comment extends Model
         return $this->belongsToMany('App\Models\Comment', 'comment_user_vote');
     }
 
-    public function upVote($user)
+    public function upVoteBy($user)
     {
         $this->votes()->attach($this->id, ['vote_type' => 'UP', 'user_id' => $user->id]);
     }
 
-    public function downVote($user)
+    public function downVoteBy($user)
     {
         $this->votes()->attach($this->id, ['vote_type' => 'DOWN', 'user_id' => $user->id]);
     }
 
-    public function removeVote($user)
+    public function removeVoteBy($user)
     {
         $this->votes()->detach(['comment_id' => $this->id, 'user_id' => $user->id]);
     }

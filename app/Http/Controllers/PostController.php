@@ -7,6 +7,7 @@ use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -16,17 +17,19 @@ class PostController extends Controller
      */
     public function index(Request $request): View
     {
-        $page = $request->get('page', 1);
+//        $page = $request->get('page', 1);
         $limit = $request->get('limit', 10);
 
-        if ($page < 1) $page = 1;
-        if ($limit < 1) $limit = 1;
+//        if ($page < 1) $page = 1;
+//        if ($limit < 1) $limit = 1;
+//
+//        $skip = ($page - 1) * $limit;
+//
+////        $posts = Post::all()->skip($skip)->take($limit)->sortBy('created_at');
 
-        $skip = ($page - 1) * $limit;
+        $posts = Post::paginate($limit);
 
-        $posts = Post::all()->skip($skip)->take($limit)->sortBy('created_at');
-
-        return view('posts.list', ['posts' => $posts, 'page' => $page, 'limit' => $limit]);
+        return view('posts.list', ['posts' => $posts]);
 //        $res = new Response();
 //        $res->setContent(Post::all());
 //        return $res;

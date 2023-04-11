@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comment_user_vote', function (Blueprint $table) {
-            $table->foreignUuid('comment_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+        Schema::create('post_votes', function (Blueprint $table) {
+//            $table->id();
+            $table->foreignUuid('post_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->enum('vote_type', ['UP', 'DOWN']);
-            $table->primary(['comment_id', 'user_id']);
+            $table->timestamps();
+            $table->primary(['post_id', 'user_id']);
         });
     }
 
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comment_user_vote');
+        Schema::dropIfExists('post_votes');
     }
 };

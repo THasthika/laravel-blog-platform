@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\PostVote;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -68,7 +69,7 @@ class DatabaseSeeder extends Seeder
 
         $posts = Post::all();
 
-        // comment and react on posts
+        // comment and post votes on posts
         foreach ($posts as $post) {
             $user_idxs = array_rand($users->toArray(), $this->COMMENT_PER_POST);
 
@@ -79,32 +80,32 @@ class DatabaseSeeder extends Seeder
             $user_idxs = array_rand($users->toArray(), $this->VOTE_PER_POST);
 
             foreach ($user_idxs as $user_idx) {
-                $post->removeVote($users[$user_idx]);
+                $vote_type = 'UP';
                 if (rand(0, 1) == 1) {
-                    $post->upVote($users[$user_idx]);
-                } else {
-                    $post->downVote($users[$user_idx]);
+                    $vote_type = 'DOWN';
                 }
+                $x = new PostVote(['post_id' => $post->id, 'user_id' => $users[$user_idx]->id, 'vote_type' => $vote_type]);
+                $x->save();
             }
         }
-        echo "Comments Created!\n";
+        echo "Comments and Post Votes Created!\n";
 
         $comments = Comment::all();
 
-        // upvote on comment
-        foreach ($comments as $comment) {
-            $user_idxs = array_rand($users->toArray(), $this->VOTE_PER_COMMENT);
-
-            foreach ($user_idxs as $user_idx) {
-                $comment->removeVote($users[$user_idx]);
-                if (rand(0, 1) == 1) {
-                    $comment->upVote($users[$user_idx]);
-                } else {
-                    $comment->downVote($users[$user_idx]);
-                }
-            }
-        }
-        echo "Comment Votes Created!\n";
+//        // upvote on comment
+//        foreach ($comments as $comment) {
+//            $user_idxs = array_rand($users->toArray(), $this->VOTE_PER_COMMENT);
+//
+//            foreach ($user_idxs as $user_idx) {
+//                $comment->removeVoteBy($users[$user_idx]);
+//                if (rand(0, 1) == 1) {
+//                    $comment->upVoteBy($users[$user_idx]);
+//                } else {
+//                    $comment->downVoteBy($users[$user_idx]);
+//                }
+//            }
+//        }
+//        echo "Comment Votes Created!\n";
 
 
     }
