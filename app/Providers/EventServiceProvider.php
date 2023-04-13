@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use App\Events\PostViewed;
+use App\Events\PostVoted;
 use App\Listeners\AddPostViewEntry;
+use App\Listeners\UpdatePostVotes;
+use App\Models\PostVote;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -21,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         PostViewed::class => [
             AddPostViewEntry::class
+        ],
+        PostVoted::class => [
+            UpdatePostVotes::class
         ]
     ];
 

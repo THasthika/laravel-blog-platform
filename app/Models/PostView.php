@@ -13,6 +13,7 @@ class PostView extends Model
 
     protected $fillable = [
         'post_id',
-        'client_ip'
+        'client_ip',
+        'created_at'
     ];
 }

@@ -37,14 +37,12 @@ class Post extends Model
     public function canUpVoteBy($user_id): bool
     {
         $x = $this->votes()->where(['user_id' => $user_id, 'post_id' => $this->id, 'vote_type' => 'UP'])->count();
-        Log::debug("UP" . $x);
         return $x == 0;
     }
 
     public function canDownVoteBy($user_id): bool
     {
         $x = $this->votes()->where(['user_id' => $user_id, 'post_id' => $this->id, 'vote_type' => 'DOWN'])->count();
-        Log::debug("DOWN" . $x);
         return $x == 0;
     }
 

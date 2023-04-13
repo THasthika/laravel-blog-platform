@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('subtitle')->nullable();
             $table->text('content');
+            $table->integer('vote_count')->default(0);
             $table->foreignUuid('user_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignUuid('category_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->timestamps();

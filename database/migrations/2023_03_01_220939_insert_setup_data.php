@@ -31,7 +31,6 @@ return new class extends Migration {
             'email' => 'admin@test.com',
         ]);
 
-        $admin->makeAdmin();
         $admin->markEmailAsVerified();
         $admin->save();
 

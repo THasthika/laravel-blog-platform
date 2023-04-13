@@ -20,7 +20,7 @@ class PostFactory extends Factory
         return [
             'title' => fake()->words(5, true),
             'subtitle' => fake()->words(10, true),
-            'content' => fake()->paragraphs(5, true),
+            'content' => fake()->paragraphs(1, true),
         ];
     }
 }

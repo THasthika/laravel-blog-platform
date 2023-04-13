@@ -67,18 +67,4 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->profile_image;
     }
 
-    public function makeAdmin()
-    {
-        $this->role = 'admin';
-    }
-
-    public function makeAuthor()
-    {
-        $this->role = 'author';
-    }
-
-    public function isAdmin(): bool
-    {
-        return $this->role == 'admin';
-    }
 }

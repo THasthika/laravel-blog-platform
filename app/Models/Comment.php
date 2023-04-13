@@ -13,6 +13,12 @@ class Comment extends Model
 {
     use HasUuids, HasFactory;
 
+    protected $fillable = [
+        'content',
+        'post_id',
+        'user_id'
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

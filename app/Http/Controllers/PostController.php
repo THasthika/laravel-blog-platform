@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Events\PostViewed;
+use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -17,22 +20,11 @@ class PostController extends Controller
      */
     public function index(Request $request): View
     {
-//        $page = $request->get('page', 1);
         $limit = $request->get('limit', 10);
 
-//        if ($page < 1) $page = 1;
-//        if ($limit < 1) $limit = 1;
-//
-//        $skip = ($page - 1) * $limit;
-//
-////        $posts = Post::all()->skip($skip)->take($limit)->sortBy('created_at');
-
-        $posts = Post::paginate($limit);
+        $posts = Post::query()->orderBy('created_at', 'desc')->paginate($limit);
 
         return view('posts.list', ['posts' => $posts]);
-//        $res = new Response();
-//        $res->setContent(Post::all());
-//        return $res;
     }
 
     /**
@@ -40,7 +32,8 @@ class PostController extends Controller
      */
     public function create(): View
     {
-        return view('posts.create', []);
+        $categories = Category::all()->sortBy('name', SORT_ASC);
+        return view('posts.create', ['categories' => $categories]);
     }
 
     /**
@@ -60,15 +53,22 @@ class PostController extends Controller
 
         PostViewed::dispatchIf(!!$post, $request, $post);
 
+//        $comments = Comment::query()->where('post_id', $id)->orderBy('created_at', 'desc')->paginate(10);
+
         return view('posts.show', ['post' => $post]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Post $post): Response
+    public function edit(Request $request, string $id): View|Response
     {
-        //
+        $post = Post::where('id', $id)->first();
+        if ($post->user_id != Auth::user()->id) {
+            return response(view('errors.403'),403);
+        }
+        $categories = Category::all()->sortBy('name', SORT_ASC);
+        return view('posts.edit', ['categories' => $categories, 'post' => $post]);
     }
 
     /**
