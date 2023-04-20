@@ -29,9 +29,13 @@ class CommentHolder extends Component
         $this->new_comment = "";
     }
 
-    public function delete_comment($comment_id)
+    public function triggerDeleteComment($comment_id)
     {
-        Log::debug($comment_id);
+        $this->emit('triggerCommentDelete', $comment_id);
+    }
+
+    public function deleteComment($comment_id)
+    {
         Comment::query()->where('id', $comment_id)->delete();
     }
 

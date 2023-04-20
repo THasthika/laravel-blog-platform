@@ -93,10 +93,12 @@ class PostEditor extends Component
         });
 
         if ($this->isNew) {
+//            redirect()->route('post.show', ['id' => $this->post->id])->with('success', 'Post success')
+            session()->flash('success', 'Post successfully created!');
             $this->redirect(route('post.show', ['id' => $this->post->id]));
+        } else {
+            session()->flash('success', 'Post successfully saved.');
         }
-
-        session()->flash('message', 'Post successfully saved.');
     }
 
     public function render()

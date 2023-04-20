@@ -1,8 +1,8 @@
 <div id="post-edit-container">
     <form wire:submit.prevent="save">
-        @if (session()->has('message'))
+        @if (session()->has('success'))
             <div class="alert alert-success mt-2">
-                {{ session('message') }}
+                {{ session('success') }}
             </div>
         @endif
         <div class="md:flex md:space-x-2">
@@ -59,6 +59,11 @@
             <div wire:ignore>
                 <textarea wire:model="post.content" name="content" id="editor">{{$initialPostContent}}</textarea>
             </div>
+            @error('post.content')
+            <label class="label">
+                <span class="label-text text-error">{{ $message }}</span>
+            </label>
+            @enderror
         </div>
         <div class="mt-4">
             <button class="btn btn-primary" type="submit">Save</button>

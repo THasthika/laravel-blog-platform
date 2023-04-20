@@ -15,7 +15,7 @@ class UserPostList extends Component
 
     public function render()
     {
-        $user_posts = Post::query()->where('user_id', $this->user->id)->paginate();
+        $user_posts = Post::query()->where('user_id', $this->user->id)->orderBy('created_at', 'desc')->paginate();
         return view('livewire.user-post-list', ['user_posts' => $user_posts]);
     }
 

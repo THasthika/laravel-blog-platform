@@ -1,8 +1,11 @@
 <x-app-layout>
     <div class="mx-auto container px-2 mt-4">
-        <div class="text-2xl">{{__("Edit Post")}}
+        <div class="text-2xl flex items-center space-x-2">
+            <span>
+                {{__("Edit Post")}}
+            </span>
             @if(Auth::user()->id == $post->user_id)
-                <a href="{{route('post.show', ['id' => $post->id])}}">(Preview)</a>
+                <a title="Preview" href="{{route('post.show', ['id' => $post->id])}}"><x-icon-eye/></a>
             @endif
         </div>
         <livewire:post-editor :categories="$categories" :post="$post" :isNew="false" />

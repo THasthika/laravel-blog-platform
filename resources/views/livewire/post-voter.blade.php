@@ -1,21 +1,21 @@
 <div class="flex items-center space-x-2">
     @if(Auth::user())
         @if($this->allowUpVote)
-            <button class="btn btn-ghost btn-sm" wire:click="up_vote"><x-icon-up-vote/></button>
+            <button title="Vote Up" class="btn btn-ghost btn-sm" wire:click="up_vote"><x-icon-up-vote/></button>
         @else
-            <button class="btn btn-ghost btn-sm" title="Revoke Vote" wire:click="remove_vote"><x-icon-x-mark/></button>
+            <button title="Remove Vote" class="btn btn-ghost btn-sm" title="Revoke Vote" wire:click="remove_vote"><x-icon-x-mark/></button>
         @endif
-        <div class="font-bold">
-            {{$post->voteCount}}
+        <div class="font-bold flex space-x-1 items-center">
+            <span>Vote Count:</span><span>{{$post->voteCount}}</span>
         </div>
         @if($this->allowDownVote)
-            <button class="btn btn-ghost btn-sm" wire:click="down_vote"><x-icon-down-vote/></button>
+            <button title="Vote Down" class="btn btn-ghost btn-sm" wire:click="down_vote"><x-icon-down-vote/></button>
         @else
-            <button class="btn btn-ghost btn-sm" title="Revoke Vote" wire:click="remove_vote"><x-icon-x-mark/></button>
+            <button title="Remove Vote" class="btn btn-ghost btn-sm" title="Revoke Vote" wire:click="remove_vote"><x-icon-x-mark/></button>
         @endif
     @else
-        <div>
-            {{$post->voteCount}}
+        <div class="font-bold flex space-x-1 items-center">
+            <span>Vote Count:</span><span>{{$post->voteCount}}</span>
         </div>
     @endif
 </div>

@@ -8,26 +8,49 @@
         </form>
     </div>
     <div>
-        @foreach($comments as $comment)
-            <div class="border my-2 p-2">
-                <div class="flex">
-                    <div class="flex-1">
-                        {{$comment->content}}
-                    </div>
-                    @if($comment->user_id == Auth::user()->id)
-                        <div>
-                            <button class="btn btn-sm btn-ghost" wire:click="delete_comment('{{$comment->id}}')">
-                                <x-icon-trash/>
-                            </button>
+        @if(sizeof($comments) > 0)
+            @foreach($comments as $comment)
+                <div class="border my-2 p-2">
+                    <div class="flex">
+                        <div class="flex-1">
+                            {{$comment->content}}
                         </div>
-                    @endif
+                        @if($comment->user_id == Auth::user()->id)
+                            <div>
+                                <button class="btn btn-sm btn-ghost text-error" wire:click="triggerDeleteComment('{{$comment->id}}')">
+                                    <x-icon-trash/>
+                                </button>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="text-right">
+                        <div class="">{{$comment->user->username}}</div>
+                        <div class="">{{$comment->created_at->diffForHumans()}}</div>
+                    </div>
                 </div>
-                <div class="text-right">
-                    <div class="">{{$comment->user->username}}</div>
-                    <div class="">{{$comment->created_at->diffForHumans()}}</div>
-                </div>
+            @endforeach
+        @else
+            <div class="border my-2 p-2 text-center font-bold">
+                <div>Be the first one to comment on this post!</div>
             </div>
-        @endforeach
+        @endif
     </div>
     <div>{{$comments->links()}}</div>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+        @this.on('triggerCommentDelete', comment_id => {
+            Swal.fire({
+                title: 'Are You Sure?',
+                html: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.value) {
+                @this.call('deleteComment', comment_id);
+                }
+            });
+        });
+        })
+    </script>
 </div>

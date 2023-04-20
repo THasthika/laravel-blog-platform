@@ -1,5 +1,10 @@
 <x-app-layout>
     <div class="container mx-auto px-2 mt-4">
+        @if ($message = Session::get('success'))
+            <div class="alert alert-success alert-block mb-4">
+                <strong>{{ $message }}</strong>
+            </div>
+        @endif
         @if($post)
             <article>
                 <div class="mb-4">
@@ -7,9 +12,6 @@
                         <div class="flex-1">
                             <h1 class="text-2xl">
                                 {{$post->title}}
-                                @if(Auth::user() && Auth::user()->id == $post->user_id)
-                                    <a href="{{route('post.edit', ['id' => $post->id])}}">(Edit)</a>
-                                @endif
                             </h1>
                             @if($post->subtitle)
                                 <h2 class="text-md">{{$post->subtitle}}</h2>
