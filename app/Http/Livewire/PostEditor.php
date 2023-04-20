@@ -8,23 +8,31 @@ use App\Models\Tag;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Optional;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use PhpParser\Node\NullableType;
 
 class PostEditor extends Component
 {
+    use WithFileUploads;
+
+    const MAX_FILE_SIZE = 1024*1024*5; // 5 MB
 
     public Post $post;
     public bool $isNew = false;
     public Collection $categories;
 
+    public $postCoverImage;
+
     protected $rules = [
         'post.title' => 'required|string|min:6',
         'post.subtitle' => '',
         'post.category_id' => 'required',
-        'post.content' => 'required|string'
+        'post.content' => 'required|string',
+        'postCoverImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:'.PostEditor::MAX_FILE_SIZE
     ];
 
     public string $tags = "";
@@ -75,6 +83,7 @@ class PostEditor extends Component
     }
 
     public function save() {
+
         $this->validate();
 
         DB::transaction(function() {
@@ -90,15 +99,37 @@ class PostEditor extends Component
             $this->removeTags($existing_tags, $tags);
             $this->addTags($existing_tags, $tags);
 
+            if ($this->postCoverImage) {
+                $name = $this->post->id . '.'. $this->postCoverImage->getClientOriginalExtension();
+                $folder = '/uploads/covers/';
+                $file_path = $folder . $name;
+                $this->postCoverImage->storeAs('/public' . $folder, $name, 'local');
+
+                $this->post->cover_image = $file_path;
+                $this->post->save();
+            }
+
         });
 
+
         if ($this->isNew) {
-//            redirect()->route('post.show', ['id' => $this->post->id])->with('success', 'Post success')
             session()->flash('success', 'Post successfully created!');
             $this->redirect(route('post.show', ['id' => $this->post->id]));
         } else {
             session()->flash('success', 'Post successfully saved.');
         }
+    }
+
+    public function deleteCoverImage()
+    {
+        if (!$this->post->cover_image) {
+            return;
+        }
+
+        File::delete($this->post->cover_image);
+
+        $this->post->cover_image = null;
+        $this->post->save();
     }
 
     public function render()

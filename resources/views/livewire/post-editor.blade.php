@@ -5,6 +5,29 @@
                 {{ session('success') }}
             </div>
         @endif
+        <div>
+            <div class="form-control w-full">
+                <label class="label" for="post-title">
+                    <span class="label-text">Cover Image</span>
+                </label>
+                <input type="file" wire:model="postCoverImage" class="file-input w-full max-w-xs" />
+                @error('postCoverImage')
+                <label class="label">
+                    <span class="label-text text-error">{{ $message }}</span>
+                </label>
+                @enderror
+                @if($post->cover_image)
+                    <div class="w-full my-4 relative">
+                        <div class="absolute right-0">
+                            <button type="button" wire:click="$emit('triggerCoverDelete')" class="btn-error">
+                                <x-icon-trash/>
+                            </button>
+                        </div>
+                        <img class="w-full object-cover max-h-60" alt="Post Cover" src="{{asset('storage'.$post->cover_image)}}"/>
+                    </div>
+                @endif
+            </div>
+        </div>
         <div class="md:flex md:space-x-2">
             <div class="form-control w-full">
                 <label class="label" for="post-title">
@@ -69,20 +92,34 @@
             <button class="btn btn-primary" type="submit">Save</button>
         </div>
     </form>
-    <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
     <script>
-        ClassicEditor
-            .create(document.querySelector('#editor'), {
-                toolbar: ['undo', 'redo', '|', 'heading', '|', 'bold', 'italic', '|', 'numberedList', 'bulletedList']
-            })
-            .then(editor => {
-                editor.model.document.on('change:data', () => {
-                    @this.set('post.content', editor.getData());
+        document.addEventListener('DOMContentLoaded', () => {
+            ClassicEditor
+                .create(document.querySelector('#editor'), {
+                    toolbar: ['undo', 'redo', '|', 'heading', '|', 'bold', 'italic', '|', 'numberedList', 'bulletedList']
                 })
-            })
-            .catch(error => {
-                console.error(error);
+                .then(editor => {
+                    editor.model.document.on('change:data', () => {
+                    @this.set('post.content', editor.getData());
+                    })
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+        @this.on('triggerCoverDelete', () => {
+            Swal.fire({
+                    title: 'Are You Sure?',
+                    html: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                }).then((result) => {
+                    if (result.value) {
+                        @this.call('deleteCoverImage');
+                    }
+                });
             });
+        });
     </script>
     </script>
 </div>

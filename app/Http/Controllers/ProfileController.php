@@ -47,34 +47,16 @@ class ProfileController extends Controller
     {
 
         $max_file_size = 1024*1024*5; // 5 MB
-
-        // Form validation
         $request->validate([
             'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:'.$max_file_size
         ]);
-
-        // Get current user
         $user = User::findOrFail(Auth::user()->id);
-
-        // Get image file
         $image = $request->file('profile_image');
-        
-        // Make a image name based on user name and current timestamp
         $name = Str::slug($user->username).'_'.time();
-
-        // Define folder path
         $folder = '/uploads/images/';
-        
-        // Make a file path where image will be stored [ folder path + file name + file extension]
         $filePath = $folder . $name. '.' . $image->getClientOriginalExtension();
-        
-        // Upload image
         $this->uploadOne($image, $folder, 'public', $name);
-        
-        // Set user profile image path in database to filePath
         $user->profile_image = $filePath;
-
-        // Persist user record to database
         $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-image-updated');

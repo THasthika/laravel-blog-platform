@@ -23,6 +23,11 @@
                     </div>
                     <hr/>
                 </div>
+                @if($post->cover_image)
+                    <div class="w-full my-4">
+                        <img class="w-full object-cover max-h-60" alt="Post Cover" src="{{asset('storage'.$post->cover_image)}}"/>
+                    </div>
+                @endif
                 <div class="mb-20">
                     {!! $post->content !!}
                 </div>
