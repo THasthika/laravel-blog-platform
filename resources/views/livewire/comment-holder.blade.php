@@ -15,7 +15,7 @@
                         <div class="flex-1">
                             {{$comment->content}}
                         </div>
-                        @if($comment->user_id == Auth::user()->id)
+                        @if(Auth::user() && $comment->user_id == Auth::user()->id)
                             <div>
                                 <button class="btn btn-sm btn-ghost text-error" wire:click="triggerDeleteComment('{{$comment->id}}')">
                                     <x-icon-trash/>

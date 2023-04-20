@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -62,9 +63,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(PostVote::class);
     }
 
-    public function getImageAttribute()
+    public function notifications(): HasMany
     {
-        return $this->profile_image;
+        return $this->hasMany(Notification::class);
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->profile_image) {
+            return asset('storage/'.$this->profile_image);
+        }
+        return "https://via.placeholder.com/200x200.png?text=" . strtoupper($this->username[0]);
     }
 
 }

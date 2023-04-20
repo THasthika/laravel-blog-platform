@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -26,6 +27,16 @@ class UserPostList extends Component
 
     public function deletePost($post_id)
     {
+        $post = Post::query()->where('id', $post_id)->first();
+        if (!$post) {
+            return;
+        }
+
+        if (Auth::user()->id != $post->user_id) {
+            session()->flash('error', 'Unauthorised');
+            return;
+        }
+
         Post::query()->where('id', $post_id)->delete();
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
@@ -29,10 +30,15 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/posts/create', [PostController::class, 'create'])->name('post.create');
     Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('post.edit');
+
+    Route::get('/notifications', [MainController::class, 'notification'])->name('notification.show');
 });
 
 // Post Routes
 Route::get('/posts', [PostController::class, 'index'])->name('post.list');
 Route::get('/posts/{id}', [PostController::class, 'show'])->name('post.show');
+
+// User Routes
+Route::get('/users/{id}', [UserController::class, 'show'])->name('user.show');
 
 require __DIR__.'/auth.php';

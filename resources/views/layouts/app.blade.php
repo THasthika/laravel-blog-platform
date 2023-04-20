@@ -32,22 +32,38 @@
                         <li><a href="{{ route('login') }}">{{__('Login')}}</a></li>
                         <li><a href="{{ route('register') }}">{{__('Register')}}</a></li>
                     @else
-                        {{--                                 <li class="text-primary-content">--}}
-                        {{--                                     <a class="btn btn-primary" href="{{ route('login') }}">New Post</a>--}}
-                        {{--                                 </li>--}}
                         <li><a href="{{ route('dashboard') }}">{{__('Dashboard')}}</a></li>
+
+
                     @endif
                 </ul>
                 @if (!Auth::guest())
                     <div class="ml-4 dropdown dropdown-end">
                         <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+                            <div>
+                                <x-icon-bell class="w-10 rounded-full" />
+                            </div>
+                        </label>
+                            <ul tabindex="0" class="mt-3 p-2 shadow dropdown-content bg-base-100 w-52">
+                                @foreach($notifications as $notification)
+                                    <li class="my-3 hover:cursor-pointer px-2 text-sm">
+                                        <div class="flex flex-col space-y-2">
+                                            <span>{{$notification->content}}</span>
+                                            <span class="text-right">{{$notification->created_at->diffForHumans()}}</span>
+                                        </div>
+                                    </li>
+                                @endforeach
+                                <li>
+                                    <a href="{{route('notification.show')}}" class="w-full btn btn-sm btn-ghost">
+                                        {{__('View All')}}
+                                    </a>
+                                </li>
+                            </ul>
+                    </div>
+                    <div class="ml-4 dropdown dropdown-end">
+                        <label tabindex="0" class="btn btn-ghost btn-circle avatar">
                             <div class="w-10 rounded-full">
-                                @if (Auth::user()->image)
-                                    <img src="{{asset('storage/'.Auth::user()->image)}}"/>
-                                @else
-                                    <img
-                                        src="https://via.placeholder.com/60x60.png?text={{Auth::user()->username[0]}}"/>
-                                @endif
+                                <img src="{{Auth::user()->imageUrl}}"/>
                             </div>
                         </label>
                         <ul tabindex="0"

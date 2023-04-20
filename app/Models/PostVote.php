@@ -10,7 +10,8 @@ class PostVote extends Model
 {
     use HasFactory;
 
-//    protected $primaryKey = ['post_id', 'user_id'];
+    public const VOTE_ACTION_UP = "UP";
+    public const VOTE_ACTION_DOWN = "DOWN";
 
     protected $fillable = [
         'post_id',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -16,7 +17,12 @@ class MainController extends Controller
 
     public function dashboard(): View
     {
-        $my_posts = Post::query()->where('user_id', Auth::user()->id)->paginate();
         return view('dashboard');
+    }
+
+    public function notification(): View
+    {
+        $notifications = Notification::query()->where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate();
+        return view('notifications', ['notifications' => $notifications]);
     }
 }

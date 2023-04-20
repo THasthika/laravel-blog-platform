@@ -1,5 +1,5 @@
 <div class="p-4">
-    <div class="text-lg">{{__("My Posts")}}</div>
+    <div class="text-lg">{{__("Posts")}}</div>
 
     <div class="flex flex-col space-y-4 mt-4">
 

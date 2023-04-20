@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Events\PostVoted;
 use App\Models\Post;
+use App\Models\PostVote;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -38,7 +39,7 @@ class PostVoter extends Component
             $this->post->removeVoteBy(Auth::user());
         }
         $this->post->upVoteBy(Auth::user());
-        PostVoted::dispatch($this->post);
+        PostVoted::dispatch($this->post, Auth::user(), PostVote::VOTE_ACTION_UP);
     }
 
     public function down_vote() {
@@ -49,7 +50,7 @@ class PostVoter extends Component
             $this->post->removeVoteBy(Auth::user());
         }
         $this->post->downVoteBy(Auth::user());
-        PostVoted::dispatch($this->post);
+        PostVoted::dispatch($this->post, Auth::user(), PostVote::VOTE_ACTION_DOWN);
     }
 
     public function remove_vote() {
@@ -57,7 +58,7 @@ class PostVoter extends Component
             return;
         }
         $this->post->removeVoteBy(Auth::user());
-        PostVoted::dispatch($this->post);
+        PostVoted::dispatch($this->post, Auth::user());
     }
     public function render()
     {

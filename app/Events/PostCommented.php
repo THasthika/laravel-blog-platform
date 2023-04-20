@@ -2,9 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Post;
-use App\Models\PostVote;
-use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -13,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PostVoted
+class PostCommented
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -21,9 +19,7 @@ class PostVoted
      * Create a new event instance.
      */
     public function __construct(
-        public Post $post,
-        public User $votedBy,
-        public string|null $voteAction = null
+        public Comment $comment
     )
     {
         //

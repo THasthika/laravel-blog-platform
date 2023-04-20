@@ -31,6 +31,15 @@
                 <div class="mb-20">
                     {!! $post->content !!}
                 </div>
+                <div class="w-full flex items-center space-x-4 justify-end">
+                    <span>by</span>
+                    <a href="{{route('user.show', ['id' => $post->user->id])}}">
+                    <span class="flex items-center space-x-4">
+                        <img class="rounded-full w-16 h-16 border" src="{{$post->user->imageUrl}}"/>
+                        <span>{{$post->user->username}}</span>
+                    </span>
+                    </a>
+                </div>
                 <livewire:comment-holder :post="$post" />
             </article>
         @else

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Events\PostCommented;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,7 @@ class CommentHolder extends Component
             'post_id' => $this->post->id
         ]);
         $comment->save();
+        PostCommented::dispatch($comment);
         $this->new_comment = "";
     }
 

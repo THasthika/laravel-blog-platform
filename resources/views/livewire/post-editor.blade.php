@@ -19,7 +19,7 @@
                 @if($post->cover_image)
                     <div class="w-full my-4 relative">
                         <div class="absolute right-0">
-                            <button type="button" wire:click="$emit('triggerCoverDelete')" class="btn-error">
+                            <button title="Remove Cover Image" type="button" wire:click="$emit('triggerCoverDelete')" class="btn btn-circle btn-error">
                                 <x-icon-trash/>
                             </button>
                         </div>

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -53,7 +54,8 @@ class PostController extends Controller
 
         PostViewed::dispatchIf(!!$post, $request, $post);
 
-//        $comments = Comment::query()->where('post_id', $id)->orderBy('created_at', 'desc')->paginate(10);
+        $x = Auth::user()->notifications()->get();
+        Log::debug($x);
 
         return view('posts.show', ['post' => $post]);
     }
