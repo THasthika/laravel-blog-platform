@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class MainController extends Controller
@@ -15,6 +16,7 @@ class MainController extends Controller
 
     public function dashboard(): View
     {
+        $my_posts = Post::query()->where('user_id', Auth::user()->id)->paginate();
         return view('dashboard');
     }
 }

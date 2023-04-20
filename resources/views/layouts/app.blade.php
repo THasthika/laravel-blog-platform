@@ -18,7 +18,7 @@
     @livewireStyles
 </head>
 
-<body class="">
+<body class="w-full">
     <header class="bg-gray-100">
         <div class="container mx-auto navbar">
             <div class="flex-1">
@@ -78,6 +78,7 @@
         {{ $slot }}
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @livewireScripts
 </body>
 </html>

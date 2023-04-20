@@ -7,9 +7,12 @@ use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class CommentHolder extends Component
 {
+
+    use WithPagination;
 
     public Post $post;
 

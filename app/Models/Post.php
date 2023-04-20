@@ -34,6 +34,23 @@ class Post extends Model
         return $up_vote_count - $down_vote_count;
     }
 
+    public function getUpVoteCountAttribute(): int
+    {
+        return $this->votes()->where('vote_type', 'UP')->count();
+    }
+
+    public function getDownVoteCountAttribute(): int
+    {
+        return $this->votes()->where('vote_type', 'DOWN')->count();
+    }
+
+    public function getViewCountAttribute(): int
+    {
+        return $this->views()->count();
+    }
+
+
+
     public function canUpVoteBy($user_id): bool
     {
         $x = $this->votes()->where(['user_id' => $user_id, 'post_id' => $this->id, 'vote_type' => 'UP'])->count();
@@ -79,6 +96,11 @@ class Post extends Model
     public function votes(): HasMany
     {
         return $this->hasMany(PostVote::class);
+    }
+
+    public function views(): HasMany
+    {
+        return $this->hasMany(PostView::class);
     }
 
 }
