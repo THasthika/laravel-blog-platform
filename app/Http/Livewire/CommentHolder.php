@@ -21,6 +21,9 @@ class CommentHolder extends Component
 
     public function post_comment()
     {
+        if (!Auth::user()) {
+            return;
+        }
         $comment = new Comment([
             'content' => $this->new_comment,
             'user_id' => Auth::user()->id,

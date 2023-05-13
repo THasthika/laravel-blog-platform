@@ -1,12 +1,14 @@
 <div class="mt-3">
     <div>Comments</div>
     <hr/>
+    @if (Auth::user())
     <div class="mt-2">
         <form wire:submit.prevent="post_comment">
             <textarea class="textarea textarea-bordered w-full" placeholder="Write a comment..." wire:model.debounce.500ms="new_comment"></textarea>
             <button type="submit" class="btn btn-sm btn-secondary">Post Comment</button>
         </form>
     </div>
+    @endif
     <div>
         @if(sizeof($comments) > 0)
             @foreach($comments as $comment)
