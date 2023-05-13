@@ -54,9 +54,6 @@ class PostController extends Controller
 
         PostViewed::dispatchIf(!!$post, $request, $post);
 
-        $x = Auth::user()->notifications()->get();
-        Log::debug($x);
-
         return view('posts.show', ['post' => $post]);
     }
 
